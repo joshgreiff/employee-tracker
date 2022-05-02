@@ -4,10 +4,10 @@ VALUES ('Sales'), ('IT'), ('Customer Service'), ('Retail');
 
 INSERT INTO roles (title, salary, department_id)
 VALUES 
-('Manager', 50000, 1),
-('Manager', 55000, 2),
-('Manager', 52000, 3),
-('Manager', 58000, 4),
+('ManagerSales', 50000, 1),
+('ManagerIT', 55000, 2),
+('ManagerCustomerService', 52000, 3),
+('ManagerRetail', 58000, 4),
 ('Salesman', 44000, 1),
 ('Cashier', 25000, 4),
 ('Front-End Developer', 60000, 2),

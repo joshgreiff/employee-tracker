@@ -10,4 +10,11 @@ const getAllDepartments = () => {
     return db.promise().query(sql)
   }
 
-module.exports = { getAllDepartments }
+  const createDepartment = (name) => {
+    const sql = 'INSERT INTO departments (name) VALUES(?)'
+    
+    const params = [name]
+    return db.promise().query(sql, params)
+  
+}
+module.exports = { getAllDepartments, createDepartment }

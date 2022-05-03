@@ -20,16 +20,17 @@ const createEmployee = (first, last, role, manager) => {
   
 }
 
-const updateEmployeeRole = () => {
+const updateEmployeeRole = (roleId, employeeId) => {
     const sql = 
     `
     UPDATE employees
     SET 
-        role = ?,
+        role_id = ?
     WHERE
-        first_name =?
+        id = ?
     `
-
+    const params = [roleId, employeeId];
+    return db.promise().query(sql, params)
 }
 
-module.exports = { getAllEmployees, createEmployee }
+module.exports = { getAllEmployees, createEmployee, updateEmployeeRole }

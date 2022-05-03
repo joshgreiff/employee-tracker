@@ -1,6 +1,6 @@
 const inquirer = require('inquirer')
 const { getAllDepartments, createDepartment } = require('./queries/departmentQueries')
-const { getAllEmployees, createEmployee} = require('./queries/employeeQueries')
+const { getAllEmployees, createEmployee, updateEmployeeRole} = require('./queries/employeeQueries')
 const { getAllRoles, createRole } = require('./queries/rolesQueries')
 // Connects to MySQL
 
@@ -10,7 +10,7 @@ const roleChoices = ['ManagerSales', 'ManagerIT', 'ManagerCustomerService', 'Man
 const departmentChoices = ['Sales', 'IT', 'Customer Service', 'Retail']
 const managerChoices = ['None', 'Jim', 'Pam', 'Oreo', 'Vanilla']
 let employeeArr = []
-
+let rolesArr = []
 
 function promptUser(){
     inquirer.prompt(
@@ -105,18 +105,33 @@ function promptUser(){
             }).then(promptUser)
         }if(data.firstQ = 'Update Employee Role'){
             getAllEmployees().then((data) => {
-                for(let i =0; i<data[0].length; i++){
-                    employeeArr.push(data[0][i].first_name + ' ' + data[0][i].last_name)
-                }
-                inquirer.prompt([
+                    for(let i =0; i<data[0].length; i++){
+                        employeeArr.push(data[0][i].first_name + ' ' + data[0][i].last_name)
+                    }
+                
+                    inquirer.prompt([
                     {
                     message: "Which employee's role would you like to change?",
                     type: 'list',
                     name: 'whichemployee',
                     choices: employeeArr
                     }
-                ])
+                    ]).then((res) => {
+                        inquirer.prompt([
+                            {
+                                message: 'What is the role you would like to add?',
+                                type: 'input',
+                                name: 'newrole'
+                            }
+                        ])
             })
+                
+            })
+
+            
+                    
+                
+                
 
         }
     })

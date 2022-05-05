@@ -17,4 +17,5 @@ const getAllDepartments = () => {
     return db.promise().query(sql, params)
   
 }
+
 module.exports = { getAllDepartments, createDepartment }

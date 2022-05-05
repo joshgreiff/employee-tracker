@@ -30,7 +30,6 @@ function promptUser(){
             ],
         }      
     )
-
     .then((data) => {
         if(data.firstQ === 'Quit'){
             return
@@ -69,7 +68,7 @@ function promptUser(){
                     choices: ['None', 'Jim', 'Pam', 'Oreo', 'Vanilla']
                 },
             ]).then((data) => {
-                createEmployee(data.firstname, data.lastname, roleChoices.indexOf(data.role) + 1, managerChoices.indexOf(data.manager))
+                createEmployee(data.firstname, data.lastname, roleChoices.indexOf(data.role) + 1, managerChoices.indexOf(data.manager)).then(employeeArr.push(data.firstname + ' ' + data.lastname))
             }).then(promptUser)
         }
         if(data.firstQ === 'Add Role'){
@@ -91,7 +90,8 @@ function promptUser(){
                     choices: ['Sales', 'IT', 'Customer Service', 'Retail']
                 },
             ]).then((data) => {
-                createRole(data.rolename, data.salary, departmentChoices.indexOf(data.department) + 1)
+                createRole(data.rolename, data.salary, departmentChoices.indexOf(data.department) + 1).then(rolesArr.push(data.rolename))
+                console.log(rolesArr)
             }).then(promptUser)
         }if(data.firstQ === 'Add Department'){
             inquirer.prompt([
@@ -103,39 +103,50 @@ function promptUser(){
             ]).then((data) => {
                 createDepartment(data.departmentname)
             }).then(promptUser)
-        }if(data.firstQ = 'Update Employee Role'){
-            getAllEmployees().then((data) => {
-                    for(let i =0; i<data[0].length; i++){
-                        employeeArr.push(data[0][i].first_name + ' ' + data[0][i].last_name)
-                    }
-                
-                    inquirer.prompt([
-                    {
-                    message: "Which employee's role would you like to change?",
-                    type: 'list',
-                    name: 'whichemployee',
-                    choices: employeeArr
-                    }
-                    ]).then((res) => {
-                        inquirer.prompt([
-                            {
-                                message: 'What is the role you would like to add?',
-                                type: 'input',
-                                name: 'newrole'
-                            }
-                        ])
-            })
-                
-            })
-
+        }if(data.firstQ === 'Update Employee Role'){
             
-                    
-                
-                
-
+           populateAndPrompt()
         }
     })
 }
 
-promptUser()
 
+// Pre populate employee and role arrays with existing data for future reference
+
+
+
+function populateAndPrompt() {
+    getAllEmployees().then((data) => {
+        for(let i = 0; i<data[0].length; i++){
+            employeeArr.push(data[0][i].first_name + ' ' + data[0][i].last_name)
+        }
+        return getAllRoles()
+    }).then((roles) => {
+        for(let i = 0; i<roles[0].length; i++){
+            rolesArr.push(roles[0][i].title)
+        }
+       
+    
+        inquirer.prompt([
+        {
+            message: "Which employee's role would you like to adjust?",
+            name: 'whichEmployee',
+            type: 'list',
+            choices: employeeArr
+        },
+        {
+            message: "Which role would you like to assign",
+            name: 'whichRole',
+            type: 'list',
+            choices: rolesArr
+        }
+        ]).then((data) => {
+            updateEmployeeRole(rolesArr.indexOf(data.whichRole) + 1, employeeArr.indexOf(data.whichEmployee) + 1)
+        }).then(promptUser)
+    })
+}
+
+
+
+
+promptUser()
